@@ -17,9 +17,18 @@ namespace RegistroBlazor.Models
         [DisplayFormat(DataFormatString = "{0:dd,mm, yyyy}")]
         public DateTime fecha { get; set; }
         [Required(ErrorMessage = "El campo RUTA es requerido.")]
+        [Url]
         public string ruta { get; set; }
         [Range(0, 10, ErrorMessage = "La importancia debe ser de 0 a 10.")]
         public int importancia { get; set; }
+
+        public Notas()
+        {
+            notasId = 0;
+            fecha = DateTime.Now;
+            ruta = string.Empty;
+            importancia = 0;
+        }
 
     }
 }

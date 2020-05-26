@@ -1,0 +1,131 @@
+﻿@page "/notas"
+@page "/notas/{notasId:int}"
+@using RegistroBlazor.BLL
+@using RegistroBlazor.Models;
+
+
+<EditForm Model="notas" OnValidSubmit="Guardar">
+     <DataAnnotationsValidator />
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <h3>Registro de Hallazgos</h3>
+
+            </div>
+
+            <div class="card-body">
+                <form>
+                    <div class="form-row align-items-center">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>ID:</label>
+                                <div class="input-group">
+                                    <InputNumber @bind-Value="notas.notasId" class="form-control col-4" />
+                                    <ValidationMessage For="(() => notas.notasId)"></ValidationMessage>
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-primary input-group-text" @onclick="Buscar">Buscar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @*fecha*@
+                    <div class="form-group">
+                        <label>FECHA:</label>
+                        <InputDate @bind-Value="notas.fecha" class="form-control" />
+                        <ValidationMessage For="@(() => notas.fecha)" />
+                    </div>
+                    @*ruta*@
+                    <div class="form-group">
+                        <label>RUTA:</label>
+                        <InputText @bind-Value="notas.ruta" class="form-control" />
+                        <ValidationMessage For="@(() => notas.ruta)" />
+                    </div>
+                    @*importancia*@
+                    <div class="form-group">
+                        <label>IMPORTANCIA:</label>
+                        <InputNumber @bind-Value="notas.importancia" class="form-control" />
+                        <ValidationMessage For="@(() => notas.importancia)" />
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer">
+                <div class="form-group text-center" display: inline-block>
+                    <button type="button" class="btn btn-lg btn-primary" @onclick="Nuevo">Nuevo</button>
+                    <button type="submit" class="btn btn-lg btn-success">Guardar</button>
+                    <button type="button" class="btn btn-lg btn-danger" @onclick="Eliminar">Eliminar</button>
+                </div>
+            </div>
+        </div>
+</EditForm>
+
+@code {
+
+    Notas notas = new Notas();
+
+    [Parameter]
+    public int notasId { get; set; }
+
+    private void Nuevo()
+    {
+        this.notas = new Notas();
+    }
+
+    protected override void OnInitialized()
+    {
+        Nuevo();
+        if (notasId > 0)
+        {
+            notas = NotasBLL.Buscar(notasId);
+        }
+    }
+
+    private void Guardar()
+    {
+        bool paso;
+        paso = NotasBLL.Guardar(notas);
+
+        if (paso)
+        {
+            Nuevo();
+            //toast.ShowSuccess("Guardado correctamente");
+        }
+        else
+        {
+            //toast.ShowError("No fue posible guardar");
+        }
+
+    }
+
+    private void Buscar()
+    {
+        var encontrado = NotasBLL.Buscar(notas.notasId);
+        if (encontrado != null)
+            this.notas = encontrado;
+        else
+        {
+            string estado = "No encontrado..";
+            //toast.ShowWarning("No encontrado");
+        }
+
+    }
+
+    private void Eliminar()
+    {
+        bool elimino;
+
+        elimino = NotasBLL.Eliminar(notas.notasId);
+
+        if (elimino)
+        {
+            Nuevo();
+            //toast.ShowSuccess("Eliminado correctamente");
+        }
+        else
+        {
+            //toast.ShowError("No fue posible eliminar");
+        }
+    }
+}

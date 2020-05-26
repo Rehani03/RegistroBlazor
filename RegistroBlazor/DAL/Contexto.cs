@@ -9,10 +9,10 @@ namespace RegistroBlazor.DAL
 {
     public class Contexto : DbContext
     {
-        public DbSet<Notas> Personas { get; set; }
+        public DbSet<Notas> Notas { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite(@"Data Source=DATA\PersonasControl.db");
+            optionsBuilder.UseSqlite(@"Data Source=DATA\HallazgosControl.db");
         }
 
     }
